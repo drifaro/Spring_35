@@ -26,7 +26,6 @@ import br.org.generation.blogpessoal.repository.UsuarioRepository;
  * A annotation @Service indica que esta é uma Classe de Serviço, ou seja,
  * implementa regras de negócio da aplicação
  */
-
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -43,23 +42,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	 * da classe UserDetailsImpl. 
 	 * 
 	 */
-
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-
 		/**
 		 * Para buscar o usuário no Banco de dados, utilizaremos o método findByUsuario,
 		 * que foi assinado na interface UsuarioRepository
 		 */
-		
 		Optional<Usuario> usuario = userRepository.findByUsuario(userName);
-		
 		/**
 		 * Se o usuário não existir, o método lança uma Exception do tipo UsernameNotFoundException.
 		 */ 
-	  
 		usuario.orElseThrow(() -> new UsernameNotFoundException(userName + " not found."));
-
 		/**
 		 * Retorna um objeto do tipo UserDetailsImpl criado com os dados recuperados do
 		 * Banco de dados.
@@ -68,7 +61,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		 * uma função lambda. Neste exemplo, o operador faz referência ao construtor da 
 		 * Classe UserDetailsImpl. 
 		 */
-
 		return usuario.map(UserDetailsImpl::new).get();
 	}
 }

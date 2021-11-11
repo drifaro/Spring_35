@@ -26,7 +26,6 @@ import br.org.generation.blogpessoal.model.Usuario;
  * 3) As Restrições (isAccountNonExpired(), isAccountNonLocked(), 
  *    isCredentialsNonExpired() e isEnabled()) da conta do usuário.
  */
-
 public class UserDetailsImpl implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
@@ -40,18 +39,15 @@ public class UserDetailsImpl implements UserDetails {
 	 * Observe que este método Construtor recebe um objeto Usuario e
 	 * recupera os dados necessários através dos respectivos métodos Get
 	 */
-
-	public UserDetailsImpl(Usuario usuario) {
+	    public UserDetailsImpl(Usuario usuario) {
 		this.userName = usuario.getUsuario();
 		this.password = usuario.getSenha();
 	}
-
-	/**
-	 * Método construtor sem parâmetros 
-	 */
-
-	public UserDetailsImpl() {	}
-
+	    /**
+		 * Método construtor sem parâmetros 
+		 */
+	public UserDetailsImpl() {
+	}
 	/**
 	 *  Sobrecarrega (@Override) o método que retorna as Autorizações
 	 *  da conta do usuário. Nesta implementação, não há nenhuma autorização
@@ -74,41 +70,31 @@ public class UserDetailsImpl implements UserDetails {
 		return userName;
 	}
 
-	/**
-	 *  Sobrecarrega (@Override) o método que Indica se a conta do usuário 
-	 *  expirou.
-	 */
-
+	/**Indica se a conta do usuário expirou.
+	 */ 
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
 	}
 
-	/**
-	 *  Sobrecarrega (@Override) o método que Indica se o usuário 
-	 *  está bloqueado ou desbloqueado.
-	 */
-
+	/**Indica se o usuário está bloqueado ou desbloqueado.
+	 */ 
 	@Override
 	public boolean isAccountNonLocked() {
 		return true;
 	}
-
-	/**
-	 *  Sobrecarrega (@Override) o método que indica se as 
-	 *  credenciais do usuário (senha) expiraram.  
+	/**  método que indica se as credenciais do usuário (senha) expiraram.
 	 */
-	
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
-
 	/**
 	 *  Sobrecarrega (@Override) o método que Indica se o usuário 
 	 *  está habilitado ou desabilitado.
 	 *  Se mudar para false nenhum usuário conseguirá logar.
 	 */
+
 
 	@Override
 	public boolean isEnabled() {
