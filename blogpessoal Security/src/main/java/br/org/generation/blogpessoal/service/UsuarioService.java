@@ -26,9 +26,9 @@ import br.org.generation.blogpessoal.repository.UsuarioRepository;
  *  Controller se limitará a checar se deu certo ou errado a requisição.
  */
 /**
-* A annotation @Service indica que esta é uma Classe de Serviço, ou seja,
-* implementa regras de negócio da aplicação
-*/
+ * A annotation @Service indica que esta é uma Classe de Serviço, ou seja,
+ * implementa regras de negócio da aplicação
+ */
 
 @Service
 public class UsuarioService {
@@ -38,11 +38,10 @@ public class UsuarioService {
 
 	public Optional<Usuario> cadastrarUsuario(Usuario usuario) {
 		/**
-		 *  Checa se o usuário já existe no Banco de Dados. 
-		 *  Se não existir retorna vazio
-		 *  
-		 *  isPresent() -> Se um valor estiver presente retorna true, caso contrário
-		 *  retorna vazio.
+		 * Checa se o usuário já existe no Banco de Dados. Se não existir retorna vazio
+		 * 
+		 * isPresent() -> Se um valor estiver presente retorna true, caso contrário
+		 * retorna vazio.
 		 */
 
 		if (usuarioRepository.findByUsuario(usuario.getUsuario()).isPresent())
@@ -50,25 +49,22 @@ public class UsuarioService {
 
 		usuario.setSenha(criptografarSenha(usuario.getSenha()));
 		/**
-		 * Retorna para a Classe UsuarioController o objeto Salvo no Banco de Dados
-		 * A Classe controladora checará se deu tudo certo nesta operação
+		 * Retorna para a Classe UsuarioController o objeto Salvo no Banco de Dados A
+		 * Classe controladora checará se deu tudo certo nesta operação
 		 * 
-		 * Optional.of -> Retorna um Optional com o valor fornecido, mas o valor não 
-		 * pode ser nulo. Como nosso método possui um Optional na sua assinatura, 
-		 * o retorno também deve ser um Optional.
+		 * Optional.of -> Retorna um Optional com o valor fornecido, mas o valor não
+		 * pode ser nulo. Como nosso método possui um Optional na sua assinatura, o
+		 * retorno também deve ser um Optional.
 		 */
 		return Optional.of(usuarioRepository.save(usuario));
 
 	}
-	
-	
 
 	public Optional<Usuario> atualizarUsuario(Usuario usuario) {
 		/**
 		 * Verifica através no metodo findById se o id para atualização existe no banco
-		 * Se o usuario isPresent vamos verificar se o ID enviado é diferente 
-		 * do usuario informado, se for retorna vazio
-		 * Se não criptografa a senha e salva os dados 
+		 * Se o usuario isPresent vamos verificar se o ID enviado é diferente do usuario
+		 * informado, se for retorna vazio Se não criptografa a senha e salva os dados
 		 * Se o id não estver presente ele retorna vazio
 		 */
 		if (usuarioRepository.findById(usuario.getId()).isPresent()) {
@@ -87,24 +83,26 @@ public class UsuarioService {
 
 		return Optional.empty();
 	}
+
 	/**
-	 *  A principal função do método autenticarUsuario, que é executado no endpoint logar,
-	 *  é gerar o token do usuário codificado em Base64. O login prorpiamente dito é executado
-	 *  pela BasicSecurityConfig em conjunto com as classes UserDetailsService e Userdetails
+	 * A principal função do método autenticarUsuario, que é executado no endpoint
+	 * logar, é gerar o token do usuário codificado em Base64. O login prorpiamente
+	 * dito é executado pela BasicSecurityConfig em conjunto com as classes
+	 * UserDetailsService e Userdetails
 	 */
 	public Optional<UsuarioLogin> autenticarUsuario(Optional<UsuarioLogin> usuarioLogin) {
 
 		Optional<Usuario> usuario = usuarioRepository.findByUsuario(usuarioLogin.get().getUsuario());
 
 		if (usuario.isPresent()) {
-		
 			if (compararSenhas(usuarioLogin.get().getSenha(), usuario.get().getSenha())) {
+
+				String token = gerarBasicToken(usuarioLogin.get().getUsuario(), usuarioLogin.get().getSenha());
 
 				usuarioLogin.get().setId(usuario.get().getId());
 				usuarioLogin.get().setNome(usuario.get().getNome());
 				usuarioLogin.get().setSenha(usuario.get().getSenha());
-				usuarioLogin.get()
-						.setToken(gerarBasicToken(usuarioLogin.get().getUsuario(), usuarioLogin.get().getSenha()));
+				usuarioLogin.get().setToken(token);
 
 				return usuarioLogin;
 
@@ -117,8 +115,7 @@ public class UsuarioService {
 
 	private String criptografarSenha(String senha) {
 		/**
-		 *  Instancia um objeto da Classe BCryptPasswordEncoder para criptografar
-		 *  a senha
+		 * Instancia um objeto da Classe BCryptPasswordEncoder para criptografar a senha
 		 */
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -128,7 +125,6 @@ public class UsuarioService {
 
 	private boolean compararSenhas(String senhaDigitada, String senhaBanco) {
 
-	
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
 		return encoder.matches(senhaDigitada, senhaBanco);
